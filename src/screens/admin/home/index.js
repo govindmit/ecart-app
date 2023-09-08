@@ -52,8 +52,7 @@ const Index = () => {
               <Image
                 style={{
                   width: '90px',
-                  height: 320,
-                  
+                  height: 320,                  
                 }}
                 key={item.id}
                 source={{uri: `http://103.127.29.85:3006${item.path}`}}
