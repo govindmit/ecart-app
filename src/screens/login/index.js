@@ -14,13 +14,12 @@ import {
   ScrollView,
   Image,
 } from 'react-native';
-
-import styles from './styles';
 import {useNavigation} from '@react-navigation/native';
 
-const Home = () => {
+import styles from './styles';
+
+const Login = () => {
   const [data, setData] = useState();
-  // console.log('data', data);
   const navigate = useNavigation();
 
   const initialValues = {
@@ -170,4 +169,4 @@ const Home = () => {
     </>
   );
 };
-export default Home;
+export default Login;

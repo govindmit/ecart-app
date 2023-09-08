@@ -34,10 +34,62 @@ export async function userForgotPassword(email) {
 }
 
 //------------------Get Banner API-----------//
-export const getBanner = async() => {
+export const getBanner = async () => {
   try {
-  const res =   await axios
-      .get('http://103.127.29.85:3006/api/admin-banner/get-banners')
+    const res = await axios.get(
+      'http://103.127.29.85:3006/api/admin-banner/get-banners',
+    );
+    return res;
+  } catch (error) {
+    return error;
+  }
+};
+
+//-----------Featured Product API----------//
+export const featuredProduct = async () => {
+  try {
+    const res = await axios.get(
+      'http://103.127.29.85:3006/api/user-product/feature-product',
+    );
+    return res;
+  } catch (error) {
+    return error;
+  }
+};
+
+
+//-------------Latest Poduct New Arrival API------------//
+export const newArrival = async () => {
+  try {
+    const res = await axios.get(
+      'http://103.127.29.85:3006/api/user-product/latest-product?option=newArrival',
+    );
+    return res;
+  } catch (error) {
+    return error;
+  }
+}
+
+
+//-------------Most View API-----------//
+export const mostView = async () => {
+  try {
+    const res = await axios.get(
+      'http://103.127.29.85:3006/api/user-product/latest-product?option=mostView',
+    );
+    return res;
+  } catch (error) {
+    return error;
+  }
+}
+
+
+//--------------Best Seller Api-------------//
+export const bestSeller = async () => {
+  try {
+    const res = await axios.get(
+      'http://103.127.29.85:3006/api/user-product/latest-product?option=mostView',
+    );
     return res;
   } catch (error) {
     return error;

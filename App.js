@@ -4,7 +4,7 @@ import SplashScreen from 'react-native-splash-screen';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
-import Home from './src/screens/login';
+import Login from './src/screens/login';
 import Index from './src/screens/admin/home';
 import ForgotPassword from './src/screens/forgotpassword';
 
@@ -23,7 +23,7 @@ function App() {
         <Stack.Screen
           options={{headerShown: false}}
           name="Login"
-          component={Home}
+          component={Login}
         />
         <Stack.Screen name="Forgotpassword" component={ForgotPassword} />
         <Stack.Screen name="Dashboard" component={Index} />
