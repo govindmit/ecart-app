@@ -7,7 +7,7 @@ import {
   View,
   TouchableOpacity,
   ScrollView,
-  TouchableHighlight,
+  Button,
 } from 'react-native';
 
 import {mostView} from '../../../api/auth';
@@ -16,14 +16,25 @@ import {newArrival} from '../../../api/auth';
 import {bestSeller} from '../../../api/auth';
 import {featuredProduct} from '../../../api/auth';
 
-import ImageSlider from 'react-native-image-slider';
-
 const Index = () => {
+  const [index, setIndex] = useState(0);
+  const [secondIndex, setSecondIndex] = useState(0)
+  const [thirdIndex, setThirdIndex] = useState(0)
+
   const [imgData, setimgData] = useState([]);
   const [mostViewData, setMostViewData] = useState([]);
   const [bestSellerData, setBestSellerData] = useState([]);
   const [newArrivalData, setNewArrivalData] = useState([]);
   const [featuredProductApi, setFeaturedProductApi] = useState([]);
+  // console.log("ababab", featuredProductApi);
+
+  const fetchPath = imgData.map(item => item.path);
+  const fetchTitle = imgData.map(item => item.title);
+
+  const productImage = featuredProductApi.map(img => img.path);
+  const productPrice = featuredProductApi.map(img => img.name);
+  const productName = featuredProductApi.map(img => img.price);
+
 
   useEffect(() => {
     // Call the function and update the state with the result
@@ -32,9 +43,10 @@ const Index = () => {
     });
   }, []);
 
+
   useEffect(() => {
     featuredProduct().then(response => {
-      setFeaturedProductApi(response);
+      setFeaturedProductApi(response.data?.result?.productData);
     });
   }, []);
 
@@ -56,54 +68,24 @@ const Index = () => {
     });
   }, []);
 
-  const images = [
-    'http://103.127.29.85:3006/uploads/imagepexels-eric-mufasa-1350789.jpg',
-    'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_1280.jpg',
-    'https://img.freepik.com/free-photo/painting-mountain-lake-with-mountain-background_188544-9126.jpg?q=10&h=200',
-  ];
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIndex(prevIndex => (prevIndex + 1) % imgData.length);
+    }, 2000);
+    return () => clearInterval(interval);
+  }, [imgData]);
+
+  useEffect(() => {
+    const newInterval = setInterval(() => {
+      setSecondIndex(prevIndex => (prevIndex + 1) % featuredProductApi.length);
+    }, 3000);
+    return () => clearInterval(newInterval);
+  }, [featuredProductApi]);
 
   return (
     <>
-      <View>
-        <ImageSlider
-          loop
-          autoPlayWithInterval={3000}
-          images={images}
-          onPress={({index}) => alert(index)}
-          customSlide={({index, item, style, width}) => (
-            // It's important to put style here because it's got offset inside
-            <View
-              key={index}
-              style={[
-                style,
-                styles.customSlide,
-                {backgroundColor: index % 2 === 0 ? 'yellow' : 'green'},
-              ]}>
-              <Image source={{uri: item}} style={styles.customImage} />
-            </View>
-          )}
-          customButtons={(position, move) => (
-            <View style={styles.buttons}>
-              {images.map((image, index) => {
-                return (
-                  <TouchableHighlight
-                    key={index}
-                    underlayColor="#ccc"
-                    onPress={() => move(index)}
-                    style={styles.button}>
-                    <Text style={position === index && styles.buttonSelected}>
-                      {index + 1}
-                    </Text>
-                  </TouchableHighlight>
-                );
-              })}
-            </View>
-          )}
-        />
-      </View>
       <ScrollView>
-        <View
-          style={{display: 'flex', flexDirection: 'column',}}>
+        <View style={{display: 'flex', flexDirection: 'column'}}>
           <View style={styles.FirstView}>
             <Image
               style={styles.MainImage}
@@ -118,63 +100,165 @@ const Index = () => {
             </TouchableOpacity>
           </View>
 
-          <View
+          <ScrollView
             style={{
-              width: '100%',
-              height: 50,
+              display: 'flex',
               flexDirection: 'row',
+            }}
+            horizontal={true}
+            pagingEnabled={true}
+            showsHorizontalScrollIndicator={false}
+            onScroll={event => {
+              const {contentOffset} = event.nativeEvent;
+              const viewSize = event.nativeEvent.layoutMeasurement.width;
+              const pageNum = Math.floor(contentOffset.x / viewSize);
+              setIndex(pageNum);
             }}>
-            {imgData.map(item => (
-              <>
-                <View style={{height: '50px'}}>
-                  <Text style={{fontSize: 5}}>{item.content}</Text>
-                  <Text style={{fontSize: 5}}>{item.title}</Text>
-                  <Image
-                    style={{
-                      width: 50,
-                      height: 100,
-                    }}
-                    key={item.id}
-                    source={{uri: `http://103.127.29.85:3006${item.path}`}}
-                  />
-                </View>
-              </>
-            ))}
-          </View>
+            <Image
+              style={styles.image}
+              source={{uri: `http://103.127.29.85:3006${fetchPath[index]}`}}
+            />
+            <Text
+              style={{
+                left: -380,
+                top: 130,
+                fontSize: 20,
+                fontWeight: '900',
+                fontFamily: 'Josefin Sans',
+              }}>
+              {fetchTitle[index]}
+            </Text>
+          </ScrollView>
 
           <View style={styles.ThirdView}>
             <Text style={styles.titleSecond}>Featured Products</Text>
           </View>
+
+          <ScrollView
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              width: 350,
+              height: 290,
+              left: 30,
+            }}
+            horizontal={true}
+            pagingEnabled={true}
+            showsHorizontalScrollIndicator={false}
+            onScroll={event => {
+              const {contentOffset} = event.nativeEvent;
+              const viewSize = event.nativeEvent.layoutMeasurement.width;
+              const pageNum = Math.floor(contentOffset.x / viewSize);
+              setIndex(pageNum);
+            }}>
+            <Image
+              style={[styles.image, styles.newImage]}
+              source={{uri: `http://103.127.29.85:3006${productImage[secondIndex]}`}}
+            />
+
+            <Text
+              style={{
+                position: 'absolute',
+                fontSize: 20,
+                fontWeight: 'bold',
+                top: 200,
+                zIndex: 1,
+              }}>
+              {productPrice[index]}
+            </Text>
+            <Text
+              style={{
+                position: 'absolute',
+                fontSize: 20,
+                fontWeight: 'bold',
+                top: 120,
+                left: 50
+              }}>
+              {productName[index]}
+            </Text>
+            <View
+              style={{
+                width: 50,
+                height: 50,
+                position: 'absolute',
+                top: 80,
+                left: 30,
+              }}>
+              <Button color="#FB9400" title="New" />
+            </View>
+          </ScrollView>
+
+          <ScrollView
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              width: 350,
+              height: 250,
+              left: 30,
+            }}
+            horizontal={true}
+            pagingEnabled={true}
+            showsHorizontalScrollIndicator={false}
+            onScroll={event => {
+              const {contentOffset} = event.nativeEvent;
+              const viewSize = event.nativeEvent.layoutMeasurement.width;
+              const pageNum = Math.floor(contentOffset.x / viewSize);
+              setIndex(pageNum);
+            }}>
+            <Image
+              style={[styles.image, styles.newImage]}
+              source={{uri: `http://103.127.29.85:3006${productImage[index]}`}}
+            />
+
+            <Text
+              style={{
+                position: 'absolute',
+                fontSize: 20,
+                fontWeight: 'bold',
+                top: 100,
+              }}></Text>
+            <Text
+              style={{
+                position: 'absolute',
+                fontSize: 20,
+                fontWeight: 'bold',
+                top: 120,
+              }}></Text>
+            <View
+              style={{
+                width: 50,
+                height: 50,
+                position: 'absolute',
+                top: 80,
+                left: 30,
+              }}></View>
+          </ScrollView>
         </View>
       </ScrollView>
     </>
   );
 };
+
 export default Index;
 
 const styles = StyleSheet.create({
   FirstView: {
-    display: 'flex',
     flex: 1,
-    width: '100%',
-    height: '70%',
-  },
-  MainImage: {
-    width:20,
-    height:100 ,
-    left:150,
+    justifyContent: 'center',
+    width: 30,
+    height: 50,
   },
   SecondView: {
-    position: 'absolute',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     height: 80,
     backgroundColor: '#333',
     paddingHorizontal: 16,
-    top: 150,
-    borderWidth: 2,
-    width: '90%',
+    top: 100,
+    width: '94%',
+    left: 0,
+    zIndex: 1,
   },
   title: {
     fontSize: 28,
@@ -188,38 +272,29 @@ const styles = StyleSheet.create({
   ThirdView: {
     width: '100%',
     display: 'flex',
-  },
-  // titleSecond: {
-  //   fontSize: 22,
-  //   color: '#0E1133',
-  //   textAlign: 'center',
-  //   fontWeight: '800',
-  //   top: 40,
-  // },
-  customSlide: {
-    backgroundColor: 'green',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  customImage: {
-    width: 100,
-    height: 100,
-  },
-  button: {
-    margin: 3,
-    width: 15,
-    height: 15,
-    opacity: 0.9,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  buttons: {
-    zIndex: 1,
-    height: 15,
-    marginTop: -25,
-    marginBottom: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
     flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+  titleSecond: {
+    fontSize: 22,
+    color: '#0E1133',
+    textAlign: 'center',
+    fontWeight: '800',
+    marginTop: 18,
+  },
+  image: {
+    width: 411.5,
+    height: 400,
+    top: 100,
+  },
+  newImage: {
+    marginTop: -50,
+  },
+  MainImage: {
+    position: 'relative',
+    width: 150,
+    height: 150,
+    marginTop: 80,
+    marginLeft: 20,
   },
 });
