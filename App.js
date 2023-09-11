@@ -7,6 +7,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import Login from './src/screens/login';
 import Index from './src/screens/admin/home';
 import ForgotPassword from './src/screens/forgotpassword';
+import Product from './src/screens/admin/product';
 
 function App() {
   useEffect(() => {
@@ -19,7 +20,7 @@ function App() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator initialRouteName="Product">
         <Stack.Screen
           options={{headerShown: false}}
           name="Login"
@@ -27,6 +28,7 @@ function App() {
         />
         <Stack.Screen name="Forgotpassword" component={ForgotPassword} />
         <Stack.Screen name="Dashboard" component={Index} />
+        <Stack.Screen name="Product" component={Product}  />
       </Stack.Navigator>
     </NavigationContainer>
   );
