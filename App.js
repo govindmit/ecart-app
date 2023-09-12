@@ -6,8 +6,10 @@ import {createStackNavigator} from '@react-navigation/stack';
 
 import Login from './src/screens/login';
 import Index from './src/screens/admin/home';
-import ForgotPassword from './src/screens/forgotpassword';
 import Product from './src/screens/admin/product';
+import MyTabs from './src/components/Bottomnavigation';
+import ForgotPassword from './src/screens/forgotpassword';
+import Categories from './src/screens/admin/categories/Index';
 
 function App() {
   useEffect(() => {
@@ -19,18 +21,26 @@ function App() {
   const Stack = createStackNavigator();
 
   return (
+    <>
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Product">
+      <Stack.Navigator initialRouteName="Categories">
+      <Stack.Screen
+          options={{headerShown: false}}
+          name="Tab"
+          component={MyTabs}
+        />
         <Stack.Screen
           options={{headerShown: false}}
           name="Login"
           component={Login}
         />
-        <Stack.Screen name="Forgotpassword" component={ForgotPassword} />
-        <Stack.Screen name="Dashboard" component={Index} />
-        <Stack.Screen name="Product" component={Product}  />
+        <Stack.Screen options={{headerShown: false}} name="Forgotpassword" component={ForgotPassword} />
+        <Stack.Screen options={{headerShown: false}} name="Dashboard" component={Index} />
+        <Stack.Screen options={{headerShown: false}} name="Product" component={Product}  />
+        <Stack.Screen options={{headerShown: false}} name="Categories" component={Categories}  />
       </Stack.Navigator>
     </NavigationContainer>
+    </>
   );
 }
 

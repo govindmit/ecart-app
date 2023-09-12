@@ -47,6 +47,7 @@ const Menu = () => {
 
 export default Menu;
 
+
 const styles = StyleSheet.create({
   dropdown: {
     margin: 16,

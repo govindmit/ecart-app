@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import React, {useEffect, useState} from 'react';
 import {
   Image,
   StyleSheet,
@@ -8,14 +7,15 @@ import {
   TouchableOpacity,
   ScrollView,
   Button,
-  TextInput,
 } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
-import { mostView } from '../../../api/auth';
-import { getBanner } from '../../../api/auth';
-import { newArrival } from '../../../api/auth';
-import { bestSeller } from '../../../api/auth';
-import { featuredProduct } from '../../../api/auth';
+import {mostView} from '../../../api/auth';
+import {getBanner} from '../../../api/auth';
+import {newArrival} from '../../../api/auth';
+import {bestSeller} from '../../../api/auth';
+import {featuredProduct} from '../../../api/auth';
+import MyTabs from '../../../components/Bottomnavigation';
 
 const Index = () => {
   //---------------- All Index Stats -------------
@@ -24,6 +24,7 @@ const Index = () => {
   const [thirdIndex, setThirdIndex] = useState(0);
   const [fourthIndex, setFourthIndex] = useState(0);
   const [fifthIndex, setFifthIndex] = useState(0);
+  const [arrowIndex, setArrowIndex] = useState();
 
   //---------------- All Data stored in this stats --------
   const [imgData, setimgData] = useState([]);
@@ -129,11 +130,23 @@ const Index = () => {
     return () => clearInterval(newInterval);
   }, [bestSellerData]);
 
+  const handlePress = () => {
+    setSecondIndex(prevIndex =>
+      prevIndex === 0 ? featuredProductApi.length - 1 : prevIndex - 1,
+    );
+  };
+
+  const handleFordwardPress = () => {
+    setSecondIndex(prevIndex =>
+      prevIndex === 0 ? featuredProductApi.length - 1 : prevIndex + 1,
+    );
+  };
+
   return (
     <>
       <ScrollView>
-        <View style={{ display: 'flex', flexDirection: 'column' }}>
-          <View style={styles.FirstView}>
+        <View style={{display: 'flex', flexDirection: 'column'}}>
+          {/* <View style={styles.FirstView}>
             <Image
               style={styles.MainImage}
               source={require('../../../assets/mangopic.png')}
@@ -145,7 +158,7 @@ const Index = () => {
             <TouchableOpacity style={styles.dropdown}>
               <Icon name="bars" size={24} color="black" />
             </TouchableOpacity>
-          </View>
+          </View> */}
 
           <ScrollView
             style={{
@@ -156,20 +169,20 @@ const Index = () => {
             pagingEnabled={true}
             showsHorizontalScrollIndicator={false}
             onScroll={event => {
-              const { contentOffset } = event.nativeEvent;
+              const {contentOffset} = event.nativeEvent;
               const viewSize = event.nativeEvent.layoutMeasurement.width;
               const pageNum = Math.floor(contentOffset.x / viewSize);
               setIndex(pageNum);
             }}>
             <Image
               style={styles.image}
-              source={{ uri: `http://103.127.29.85:3006${fetchPath[index]}` }}
+              source={{uri: `http://103.127.29.85:3006${fetchPath[index]}`}}
             />
             <Text
               style={{
                 left: -380,
-                top: 130,
-                fontSize: 20,
+                top: 70,
+                fontSize: 30,
                 fontWeight: '900',
                 fontFamily: 'Josefin Sans',
               }}>
@@ -193,7 +206,7 @@ const Index = () => {
             pagingEnabled={true}
             showsHorizontalScrollIndicator={false}
             onScroll={event => {
-              const { contentOffset } = event.nativeEvent;
+              const {contentOffset} = event.nativeEvent;
               const viewSize = event.nativeEvent.layoutMeasurement.width;
               const pageNum = Math.floor(contentOffset.x / viewSize);
               setIndex(pageNum);
@@ -205,12 +218,29 @@ const Index = () => {
               }}
             />
 
+            <TouchableOpacity onPress={() => handlePress(arrowIndex)}>
+              <Icon
+                name="arrow-back-ios"
+                size={40}
+                style={{zIndex: 1, top: 170, left: -410}}
+              />
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={() => handleFordwardPress(arrowIndex) }>
+              <Icon
+                name="arrow-forward-ios"
+                size={40}
+                style={{zIndex: 1, top: 170, left: -130}}
+              />
+            </TouchableOpacity>
+
             <Text
               style={{
                 position: 'absolute',
                 fontSize: 20,
                 fontWeight: 'bold',
-                top: 200,
+                top: 350,
+                left: 100,
               }}>
               {productPrice[index]}
             </Text>
@@ -221,6 +251,7 @@ const Index = () => {
                 fontWeight: 'bold',
                 top: 320,
                 left: 50,
+                zIndex: 1,
               }}>
               {productName[index]}
             </Text>
@@ -236,7 +267,7 @@ const Index = () => {
             </View>
           </ScrollView>
 
-          <View style={{ marginTop: 50 }}>
+          <View style={{marginTop: 50}}>
             <View
               style={{
                 display: 'flex',
@@ -246,7 +277,12 @@ const Index = () => {
               }}>
               <TouchableOpacity>
                 <Text
-                  style={{ fontSize: 30, fontWeight: '900', color: '#0E1133' }}>
+                  style={{
+                    fontSize: 30,
+                    fontWeight: '900',
+                    color: '#0E1133',
+                    marginBottom: 20,
+                  }}>
                   Latest Product
                 </Text>
               </TouchableOpacity>
@@ -264,7 +300,7 @@ const Index = () => {
               pagingEnabled={true}
               showsHorizontalScrollIndicator={false}
               onScroll={event => {
-                const { contentOffset } = event.nativeEvent;
+                const {contentOffset} = event.nativeEvent;
                 const viewSize = event.nativeEvent.layoutMeasurement.width;
                 const pageNum = Math.floor(contentOffset.x / viewSize);
                 setSecondIndex(pageNum);
@@ -278,7 +314,7 @@ const Index = () => {
             </ScrollView>
           </View>
 
-          <View style={{ marginTop: 50 }}>
+          <View style={{marginTop: 50}}>
             <View
               style={{
                 display: 'flex',
@@ -288,7 +324,12 @@ const Index = () => {
               }}>
               <TouchableOpacity>
                 <Text
-                  style={{ fontSize: 30, fontWeight: '900', color: '#0E1133' }}>
+                  style={{
+                    fontSize: 30,
+                    fontWeight: '900',
+                    color: '#0E1133',
+                    marginTop: -60,
+                  }}>
                   New Arrivals
                 </Text>
               </TouchableOpacity>
@@ -306,7 +347,7 @@ const Index = () => {
               pagingEnabled={true}
               showsHorizontalScrollIndicator={false}
               onScroll={event => {
-                const { contentOffset } = event.nativeEvent;
+                const {contentOffset} = event.nativeEvent;
                 const viewSize = event.nativeEvent.layoutMeasurement.width;
                 const pageNum = Math.floor(contentOffset.x / viewSize);
                 setThirdIndex(pageNum);
@@ -320,7 +361,7 @@ const Index = () => {
             </ScrollView>
           </View>
 
-          <View style={{ marginTop: 50 }}>
+          <View style={{marginTop: 50}}>
             <View
               style={{
                 display: 'flex',
@@ -330,7 +371,7 @@ const Index = () => {
               }}>
               <TouchableOpacity>
                 <Text
-                  style={{ fontSize: 30, fontWeight: '900', color: '#0E1133' }}>
+                  style={{fontSize: 30, fontWeight: '900', color: '#0E1133'}}>
                   Most Views
                 </Text>
               </TouchableOpacity>
@@ -348,7 +389,7 @@ const Index = () => {
               pagingEnabled={true}
               showsHorizontalScrollIndicator={false}
               onScroll={event => {
-                const { contentOffset } = event.nativeEvent;
+                const {contentOffset} = event.nativeEvent;
                 const viewSize = event.nativeEvent.layoutMeasurement.width;
                 const pageNum = Math.floor(contentOffset.x / viewSize);
                 setFourthIndex(pageNum);
@@ -362,7 +403,7 @@ const Index = () => {
             </ScrollView>
           </View>
 
-          <View style={{ marginTop: 50 }}>
+          <View style={{marginTop: 50}}>
             <View
               style={{
                 display: 'flex',
@@ -372,7 +413,7 @@ const Index = () => {
               }}>
               <TouchableOpacity>
                 <Text
-                  style={{ fontSize: 30, fontWeight: '900', color: '#0E1133' }}>
+                  style={{fontSize: 30, fontWeight: '900', color: '#0E1133'}}>
                   Best Seller
                 </Text>
               </TouchableOpacity>
@@ -390,7 +431,7 @@ const Index = () => {
               pagingEnabled={true}
               showsHorizontalScrollIndicator={false}
               onScroll={event => {
-                const { contentOffset } = event.nativeEvent;
+                const {contentOffset} = event.nativeEvent;
                 const viewSize = event.nativeEvent.layoutMeasurement.width;
                 const pageNum = Math.floor(contentOffset.x / viewSize);
                 setFifthIndex(pageNum);
@@ -403,118 +444,12 @@ const Index = () => {
               />
             </ScrollView>
           </View>
-
-          <View
-            style={{
-              width: '100%',
-              height: 550,
-              padding: 20,
-              marginTop: 80,
-              backgroundColor: '#eeeeee',
-              display: 'flex',
-              shadowOffset: { width: 20, height: 30 },
-              shadowRadius: 50,
-              shadowOpacity: 2,
-              elevation: 5,
-            }}>
-            <Text
-              style={{
-                fontSize: 20,
-                fontWeight: '900',
-                lineHeight: 25,
-                marginTop: 30,
-                marginBottom: 15,
-                textTransform: 'uppercase',
-                color: 'black',
-                textDecorationLine: 'underline',
-                textDecorationStyle: 'solid',
-              }}>
-              Contact US Updates
-            </Text>
-            <Text
-              style={{
-                fontSize: 14,
-                fontWeight: '700',
-                lineHeight: 25,
-                marginTop: 20,
-                marginBottom: 10,
-                color: 'black',
-              }}>
-              Address : -
-            </Text>
-            <Text
-              style={{
-                fontSize: 14,
-                fontWeight: '700',
-                lineHeight: 25,
-                marginTop: 20,
-                marginBottom: 10,
-                color: 'black',
-              }}>
-              Cell-Phone : 6589451236
-            </Text>
-            <Text
-              style={{
-                fontSize: 14,
-                fontWeight: '700',
-                lineHeight: 25,
-                marginTop: 20,
-                marginBottom: 10,
-                color: 'black',
-              }}>
-              Email : tp@email.com
-            </Text>
-
-            <Text
-              style={{
-                fontSize: 20,
-                fontWeight: '900',
-                lineHeight: 25,
-                marginTop: 30,
-                marginBottom: 15,
-                textTransform: 'uppercase',
-                color: 'black',
-                textDecorationLine: 'underline',
-                textDecorationStyle: 'solid',
-              }}>
-              Email Newsletters
-            </Text>
-            <TextInput
-              style={{ elevation: 1, padding: 15 }}
-              placeholder="Email"
-            />
-            <View style={{ width: 90, marginTop: 5 }}>
-              <Button title="Subscribe" />
-            </View>
-            <View>
-              <Text
-                style={{
-                  width: '100%',
-                  marginTop: 20,
-                  fontSize: 17,
-                  padding: 15,
-                  left: 4,
-                }}>
-                © MangoIT E-cart 2022. All Rights Reserved.
-              </Text>
-              <View
-                style={{ display: 'flex', flexDirection: 'row', right: -180 }}>
-                <Image
-                  style={{ width: 50, height: 30 }}
-                  source={require('../../../assets/paypalicon.png')}></Image>
-                <Image
-                  source={require('../../../assets/discovericon.png')}></Image>
-                <Image source={require('../../../assets/visaicon.png')}></Image>
-                <Image source={require('../../../assets/cardicon.png')}></Image>
-              </View>
-            </View>
-          </View>
+          <MyTabs />
         </View>
       </ScrollView>
     </>
   );
 };
-
 export default Index;
 
 const styles = StyleSheet.create({
@@ -550,7 +485,8 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-around',
-    marginTop: 25,
+    marginTop: 30,
+    marginBottom: 20,
   },
   titleSecond: {
     fontSize: 22,
@@ -562,7 +498,7 @@ const styles = StyleSheet.create({
   image: {
     width: 411.5,
     height: 400,
-    top: 100,
+    top: 0,
   },
   newImage: {
     marginTop: -50,

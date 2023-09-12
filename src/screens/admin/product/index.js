@@ -7,18 +7,13 @@ import {
   TextInput,
   ScrollView,
 } from 'react-native';
-
-import Logo from '../../../components/Logo';
-import Menu from '../../../components/Menu';
 import Footer from '../../../components/Footer';
 
 const Product = () => {
   return (
     <>
       <ScrollView>
-        <Logo />
-        <Menu />
-        <View style={{ width: '100%' }}>
+        <View style={{ width: '100%', marginTop: 70 }}>
           <Text
             style={{
               position: 'absolute',
@@ -58,15 +53,15 @@ const Product = () => {
           />
           <View
             style={{
-              width: '80%',
-              borderWidth: 1,
+              width: '90%',
+              // borderWidth: 1,
               marginTop: 20,
-              height: 150,
+              height: 130,
               shadowOffset: { width: 5, height: 5 },
               shadowRadius: 10,
               shadowOpacity: 10,
               elevation: 2,
-              left: 30,
+              left: 20,
             }}>
             <TextInput
               style={{
