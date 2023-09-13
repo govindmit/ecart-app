@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {
   FlatList,
@@ -10,29 +10,69 @@ import {
   Image,
 } from 'react-native';
 import MyTabs from '../../../components/Bottomnavigation';
+import {getCategoriesApi} from '../../../api/auth';
 
 const Categories = () => {
   const [selectedCategory, setSelectedCategory] = useState(Select);
-
   const [categoryList, setCategoryList] = useState([]);
-  console.log('Data', categoryList);
+  // console.log('Data', categoryList);
 
   const Data = ['Women', 'Men', 'Kids'];
   const Select = 'Women';
+  const cateArr = [];
+  // console.log('newArray', cateArr);
 
-  const handleSearch = async () => {
-    try {
-      const response = await fetch(
-        'http://103.127.29.85:3006/api/user-product/get-categories',
-      );
-      const data = await response.json();
-      setCategoryList(
-        data.result?.data?.rows.map(item => item.categoryTranslations).flat()
-      );
-    } catch (error) {
-      console.error('err', error);
+  //------------ Get the parentId
+  const getData = categoryList.map(
+    item => (
+      {
+        parent: item.parentId,
+        id: item.id,
+      }
+    ),
+  );
+
+  getData.map(item => {
+    if (item.parent == null) {
+      const idd = item.id;
+      console.log('idddd', idd);
     }
-  };
+  });
+
+  //---- Seperated the parentId in two variables Null and Numbers
+  // const nullValues = [];
+  // const numberValues = [];
+
+  // getData.forEach(value => {
+  //   if (value === null) {
+  //     nullValues.push(value);
+  //   } else {
+  //     numberValues.push(value);
+  //   }
+  // });
+
+  // console.log("ppp", nullValues);
+  // console.log("ppp", numberValues);
+
+  //  if(numberValues === 72 && categoryList === 72 ){
+  //   cateArr =  categoryList
+  // }
+
+  // categoryList.map(item => {
+  //   const data = item.categoryTranslations
+  //   // console.log('ssdsadsd', data);
+  //   for (let i = 0; i < data.length; i++) {
+  //     const obj = data[i];
+  //     // console.log("objData",obj);
+  //     // cateArr.push(obj)
+  //   }
+  // });
+
+  useEffect(() => {
+    getCategoriesApi().then(result => {
+      setCategoryList(result?.result?.data?.rows);
+    });
+  }, []);
 
   return (
     <>
@@ -45,17 +85,17 @@ const Categories = () => {
             marginTop: 20,
           }}>
           <Icon
-            style={{ marginLeft: 13 }}
+            style={{marginLeft: 13}}
             name="arrow-back-ios"
             color="black"
             size={40}
           />
-          <Text style={{ marginTop: 5, fontSize: 25, color: 'black' }}>
+          <Text style={{marginTop: 5, fontSize: 25, color: 'black'}}>
             Categories
           </Text>
-          <TouchableOpacity onPress={handleSearch}>
+          <TouchableOpacity>
             <Icon
-              style={{ marginRight: 10 }}
+              style={{marginRight: 10}}
               name="search"
               color="black"
               size={40}
@@ -68,7 +108,7 @@ const Categories = () => {
           horizontal
           data={Data}
           showsHorizontalScrollIndicator={false}
-          renderItem={({ item }) => {
+          renderItem={({item}) => {
             return (
               <TouchableOpacity
                 style={[Select ? styles.selectedItemContainer : {}]}>

@@ -15,7 +15,7 @@ import configs from '../config/Config';
 export async function userForgotPassword(email) {
   try {
     let res = await axios
-      .post(`${configs.apiUrl}/user-auth/forgot-password`, {email})
+      .post(`${configs.apiUrl}/user-auth/forgot-password`, { email })
       .then(response => {
         console.log('res 1 = ', response.data);
         console.log('res 2 = ', response.status);
@@ -57,7 +57,6 @@ export const featuredProduct = async () => {
   }
 };
 
-
 //-------------Latest Poduct New Arrival API------------//
 export const newArrival = async () => {
   try {
@@ -68,8 +67,7 @@ export const newArrival = async () => {
   } catch (error) {
     return error;
   }
-}
-
+};
 
 //-------------Most View API-----------//
 export const mostView = async () => {
@@ -81,8 +79,7 @@ export const mostView = async () => {
   } catch (error) {
     return error;
   }
-}
-
+};
 
 //--------------Best Seller Api-------------//
 export const bestSeller = async () => {
@@ -94,4 +91,18 @@ export const bestSeller = async () => {
   } catch (error) {
     return error;
   }
-}
+};
+
+//--------------Get Categories API-----------//
+export const getCategoriesApi = async () => {
+  try {
+    const response = await fetch(
+      `${configs.apiUrl}/user-product/get-categories`,
+    );
+    const data = await response.json();
+    // console.log('data', data);
+    return data;
+  } catch (error) {
+    return error;
+  }
+};
